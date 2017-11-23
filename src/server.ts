@@ -36,8 +36,7 @@ class Server {
 	}
 
 	routes(): void {
-		let router: express.Router;
-		router = express.Router();
+		let router: express.Router = express.Router();
 
 		this.app.use('/', router);
 		this.app.use('/api/v1/posts', PostRouter);
@@ -46,4 +45,5 @@ class Server {
 }
 
 // export
-export default new Server().app;
+const server = new Server();
+export default server.app;
