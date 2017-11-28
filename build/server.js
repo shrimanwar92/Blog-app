@@ -30,8 +30,7 @@ var Server = /** @class */ (function () {
         // this.app.use(cors());
     };
     Server.prototype.routes = function () {
-        var router;
-        router = express.Router();
+        var router = express.Router();
         this.app.use('/', router);
         this.app.use('/api/v1/posts', PostRouter_1.default);
         this.app.use('/api/v1/users', UserRouter_1.default);
@@ -39,4 +38,5 @@ var Server = /** @class */ (function () {
     return Server;
 }());
 // export
-exports.default = new Server().app;
+var server = new Server();
+exports.default = server.app;

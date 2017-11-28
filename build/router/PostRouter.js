@@ -2,8 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var Post_1 = require("../models/Post");
+var multer = require("multer");
 var PostRouter = /** @class */ (function () {
     function PostRouter() {
+        this.storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, 'uploads/');
+            },
+            filename: function (req, file, cb) {
+                cb(null, file.originalname);
+            }
+        });
+        this.upload = multer({ storage: this.storage });
         this.router = express_1.Router();
         this.routes();
     }
@@ -65,12 +75,23 @@ var PostRouter = /** @class */ (function () {
             res.json({ status: status, err: err });
         });
     };
+    PostRouter.prototype.uploadFile = function (req, res) {
+        if (!req.file) {
+            var status_1 = res.statusCode;
+            return res.json({ status: status_1 });
+        }
+        else {
+            var status_2 = res.statusCode;
+            return res.json({ status: status_2 });
+        }
+    };
     PostRouter.prototype.routes = function () {
         this.router.get('/', this.GetPosts);
         this.router.get('/:slug', this.GetPost);
         this.router.post('/', this.CreatePost);
         this.router.put('/:slug', this.UpdatePost);
         this.router.delete('/:slug', this.DeletePost);
+        this.router.post('/upload', this.upload.single('fileUpload'), this.uploadFile);
     };
     return PostRouter;
 }());

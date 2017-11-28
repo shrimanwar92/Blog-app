@@ -1,8 +1,19 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Post from '../models/Post';
+import * as multer from 'multer';
 
 class PostRouter {
 	router: Router;
+
+	storage = multer.diskStorage({
+		destination: (req: Request, file, cb: Function) => {
+			cb(null, 'uploads/');
+		},
+		filename: (req: Request, file, cb: Function) => {
+			cb(null, file.originalname);
+		}
+	});
+	upload = multer({storage: this.storage});
 
 	constructor() {
 		this.router = Router();
@@ -77,12 +88,23 @@ class PostRouter {
 		})
 	}
 
+	uploadFile(req: Request, res: Response) {
+		if (!req.file) {
+		    const status = res.statusCode;
+		    return res.json({ status });
+		  } else {
+		    const status = res.statusCode;
+		    return res.json({ status });
+		  }
+	}
+
 	routes() {
 		this.router.get('/', this.GetPosts);
 		this.router.get('/:slug', this.GetPost);
 		this.router.post('/', this.CreatePost);
 		this.router.put('/:slug', this.UpdatePost);
 		this.router.delete('/:slug', this.DeletePost);
+		this.router.post('/upload', this.upload.single('fileUpload') ,this.uploadFile);
 	}
 }
 
