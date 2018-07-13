@@ -4,6 +4,8 @@
 
 yarn install
 
+yarn ts
+
 yarn server
 
 # Note
